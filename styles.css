@@ -134,11 +134,21 @@ body {
 }
 
 .game-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     color: #131313;
     font-size: 48px;
     margin-top: 0;
     margin-bottom: 5px;  /* reduced from 20px */
     text-align: center;
+}
+
+.title-icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
 }
 
 .game-tagline {
@@ -160,6 +170,15 @@ body {
 @media (max-width: 850px) {
     .game-wrapper, .score-panel, #game-container {
         width: 95vw;
+    }
+
+    .game-title {
+        font-size: 36px;
+    }
+
+    .title-icon {
+        width: 48px;
+        height: 48px;
     }
     
     #game-container {
