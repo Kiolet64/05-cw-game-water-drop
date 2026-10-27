@@ -30,6 +30,7 @@ function startGame() {
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
   document.getElementById("start-btn").textContent = "Game in progress";
+  document.getElementById("start-btn").hidden = false;
   document.getElementById("game-container").replaceChildren();
 
   // Create new drops every second (1000 milliseconds)
@@ -51,14 +52,24 @@ function endGame() {
   const gameContainer = document.getElementById("game-container");
   gameContainer.replaceChildren();
 
+  const gameOver = document.createElement("div");
+  gameOver.className = "game-over";
+
   const messages = score >= 20 ? winningMessages : losingMessages;
   const gameMessage = document.createElement("p");
   gameMessage.className = `game-message ${score >= 20 ? "win" : "lose"}`;
   gameMessage.setAttribute("role", "status");
   gameMessage.textContent = messages[Math.floor(Math.random() * messages.length)];
-  gameContainer.appendChild(gameMessage);
 
-  document.getElementById("start-btn").textContent = "Play Again";
+  const resetButton = document.createElement("button");
+  resetButton.id = "reset-btn";
+  resetButton.textContent = "Reset";
+  resetButton.addEventListener("click", startGame);
+
+  gameOver.append(gameMessage, resetButton);
+  gameContainer.appendChild(gameOver);
+
+  document.getElementById("start-btn").hidden = true;
 }
 
 function createDrop() {
