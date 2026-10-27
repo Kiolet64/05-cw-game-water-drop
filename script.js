@@ -1,10 +1,9 @@
 // Variables to control game state
 let gameRunning = false; // Keeps track of whether game is active or not
-let dropMaker; // Will store our timer that creates drops regularly
+let dropMaker; // Will store the timer for the next drop
 let countdownTimer;
 let score = 0;
 let timeLeft = 30;
-let dropsSinceBad = 0;
 const winningMessages = [
   "Amazing catch! You win!",
   "You kept the water flowing! You win!",
@@ -26,15 +25,13 @@ function startGame() {
   gameRunning = true;
   score = 0;
   timeLeft = 30;
-  dropsSinceBad = 0;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
   document.getElementById("start-btn").textContent = "Game in progress";
   document.getElementById("start-btn").hidden = false;
   document.getElementById("game-container").replaceChildren();
 
-  // Create new drops every second (1000 milliseconds)
-  dropMaker = setInterval(createDrop, 1000);
+  scheduleNextDrop();
   countdownTimer = setInterval(() => {
     timeLeft -= 1;
     document.getElementById("time").textContent = timeLeft;
@@ -47,7 +44,7 @@ function startGame() {
 
 function endGame() {
   gameRunning = false;
-  clearInterval(dropMaker);
+  clearTimeout(dropMaker);
   clearInterval(countdownTimer);
   const gameContainer = document.getElementById("game-container");
   gameContainer.replaceChildren();
@@ -69,14 +66,54 @@ function endGame() {
   gameOver.append(gameMessage, resetButton);
   gameContainer.appendChild(gameOver);
 
+  if (score >= 20) launchConfetti();
+
   document.getElementById("start-btn").hidden = true;
+}
+
+function launchConfetti() {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const confettiLayer = document.createElement("div");
+  const colors = ["#ffc907", "#ff902a", "#2e9df7", "#4fcb53", "#f16061"];
+  confettiLayer.className = "confetti-layer";
+  confettiLayer.classList.toggle("reduced-motion", prefersReducedMotion);
+  confettiLayer.setAttribute("aria-hidden", "true");
+
+  const pieceCount = prefersReducedMotion ? 40 : 140;
+  for (let index = 0; index < pieceCount; index += 1) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = `${Math.random() * 100}vw`;
+    piece.style.setProperty("--confetti-top", `${Math.random() * 70 + 15}vh`);
+    piece.style.setProperty("--confetti-color", colors[Math.floor(Math.random() * colors.length)]);
+    piece.style.setProperty("--confetti-size", `${Math.random() * 10 + 8}px`);
+    piece.style.setProperty("--confetti-drift", `${Math.random() * 240 - 120}px`);
+    piece.style.setProperty("--confetti-rotation", `${Math.random() * 1080 + 360}deg`);
+    piece.style.setProperty("--confetti-duration", `${Math.random() * 2 + 2.5}s`);
+    piece.addEventListener("animationend", () => {
+      piece.remove();
+      if (confettiLayer.childElementCount === 0) confettiLayer.remove();
+    });
+    confettiLayer.appendChild(piece);
+  }
+
+  document.body.appendChild(confettiLayer);
+}
+
+function scheduleNextDrop() {
+  const delay = Math.random() * 450 + 350;
+  dropMaker = setTimeout(() => {
+    if (!gameRunning) return;
+    createDrop();
+    scheduleNextDrop();
+  }, delay);
 }
 
 function createDrop() {
   // Create a new div element that will be our water drop
   const drop = document.createElement("div");
-  const isBadDrop = dropsSinceBad >= 4 || Math.random() < 0.28;
-  dropsSinceBad = isBadDrop ? 0 : dropsSinceBad + 1;
+  const isBadDrop = Math.random() < 0.28;
   drop.className = isBadDrop ? "water-drop bad-drop" : "water-drop";
 
   // Make drops different sizes for visual variety
@@ -91,8 +128,8 @@ function createDrop() {
   const xPosition = Math.random() * (gameWidth - 60);
   drop.style.left = xPosition + "px";
 
-  // Make drops fall a little faster
-  drop.style.animationDuration = "2.5s";
+  // Keep the drop fall speed at two seconds
+  drop.style.animationDuration = "2s";
 
   // Add the new drop to the game screen
   document.getElementById("game-container").appendChild(drop);

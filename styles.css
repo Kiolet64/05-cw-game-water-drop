@@ -84,9 +84,51 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 14px;
+    z-index: 2;
     background-color: #fff9e6;
     border: 2px solid currentColor;
     border-radius: 8px;
+}
+
+.confetti-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -16px;
+    width: var(--confetti-size);
+    height: calc(var(--confetti-size) * 1.5);
+    background-color: var(--confetti-color);
+    opacity: 0.9;
+    animation: confetti-fall var(--confetti-duration) ease-in forwards;
+}
+
+.confetti-layer.reduced-motion .confetti-piece {
+    top: var(--confetti-top);
+    animation: confetti-fade 1.2s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+    from {
+        transform: translate3d(0, -20px, 0) rotate(0deg);
+    }
+    to {
+        transform: translate3d(var(--confetti-drift), 110vh, 0) rotate(var(--confetti-rotation));
+    }
+}
+
+@keyframes confetti-fade {
+    from {
+        opacity: 0.9;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 .game-message {
