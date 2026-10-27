@@ -4,6 +4,7 @@ let dropMaker; // Will store our timer that creates drops regularly
 let countdownTimer;
 let score = 0;
 let timeLeft = 30;
+let dropsSinceBad = 0;
 const winningMessages = [
   "Amazing catch! You win!",
   "You kept the water flowing! You win!",
@@ -25,6 +26,7 @@ function startGame() {
   gameRunning = true;
   score = 0;
   timeLeft = 30;
+  dropsSinceBad = 0;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
   document.getElementById("start-btn").textContent = "Game in progress";
@@ -62,7 +64,9 @@ function endGame() {
 function createDrop() {
   // Create a new div element that will be our water drop
   const drop = document.createElement("div");
-  drop.className = "water-drop";
+  const isBadDrop = dropsSinceBad >= 4 || Math.random() < 0.28;
+  dropsSinceBad = isBadDrop ? 0 : dropsSinceBad + 1;
+  drop.className = isBadDrop ? "water-drop bad-drop" : "water-drop";
 
   // Make drops different sizes for visual variety
   const initialSize = 60;
@@ -76,14 +80,14 @@ function createDrop() {
   const xPosition = Math.random() * (gameWidth - 60);
   drop.style.left = xPosition + "px";
 
-  // Make drops fall for 4 seconds
-  drop.style.animationDuration = "4s";
+  // Make drops fall a little faster
+  drop.style.animationDuration = "2.5s";
 
   // Add the new drop to the game screen
   document.getElementById("game-container").appendChild(drop);
 
   drop.addEventListener("click", () => {
-    score += 1;
+    score += isBadDrop ? -1 : 1;
     document.getElementById("score").textContent = score;
     drop.remove();
   });

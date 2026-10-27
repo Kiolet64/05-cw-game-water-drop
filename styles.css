@@ -29,7 +29,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 24px 0;
+    padding: 24px 16px;
     background: linear-gradient(135deg, #ffc907 0%, #ff902a 100%);
     font-family: "Baloo 2", cursive;
 }
@@ -38,6 +38,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(100%, 800px);
     gap: 20px;
 }
 
@@ -45,7 +46,7 @@ body {
     display: flex;
     justify-content: space-between;  /* Space between score and button */
     align-items: center;
-    width: 800px;
+    width: 100%;
     padding: 10px;
     background-color: #fff9e6;
     border: 2px solid #ff902a;
@@ -61,8 +62,9 @@ body {
 }
 
 #game-container {
-    width: 800px;
-    height: 600px;
+    --drop-fall-distance: clamp(320px, 70svh, 600px);
+    width: 100%;
+    height: var(--drop-fall-distance);
     background-color: #c9efff;
     background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0 2px, transparent 2px 22px);
     border: 3px solid #2e9df7;
@@ -135,7 +137,7 @@ body {
 }
 
 .bad-drop {
-    background-color: #ff4444;
+    background-color: #4fcb53;
 }
 
 .game-title {
@@ -169,15 +171,11 @@ body {
         transform: translateY(-20px);
     }
     to {
-        transform: translateY(600px);
+        transform: translateY(var(--drop-fall-distance, 600px));
     }
 }
 
 @media (max-width: 850px) {
-    .game-wrapper, .score-panel, #game-container {
-        width: 95vw;
-    }
-
     .game-title {
         font-size: 36px;
     }
@@ -190,8 +188,31 @@ body {
         width: 48px;
         height: 48px;
     }
-    
-    #game-container {
-        height: 70vh;
+}
+
+@media (max-width: 560px) {
+    body {
+        align-items: flex-start;
+        padding: 16px 12px;
+    }
+
+    .game-wrapper {
+        gap: 14px;
+    }
+
+    .score-panel {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 12px;
+    }
+
+    .score,
+    .timer {
+        font-size: 20px;
+    }
+
+    #start-btn {
+        grid-column: 1 / -1;
+        min-height: 44px;
     }
 }
