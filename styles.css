@@ -29,8 +29,9 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    padding: 24px 0;
+    background: linear-gradient(135deg, #ffc907 0%, #ff902a 100%);
+    font-family: "Baloo 2", cursive;
 }
 
 .game-wrapper {
@@ -46,22 +47,25 @@ body {
     align-items: center;
     width: 800px;
     padding: 10px;
-    background-color: #fff;
+    background-color: #fff9e6;
+    border: 2px solid #ff902a;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 0 rgba(150, 83, 0, 0.18);
 }
 
 .timer {
     flex: 0 1 auto;
     font-size: 24px;
     font-weight: bold;
+    color: #2e85b7;
 }
 
 #game-container {
     width: 800px;
     height: 600px;
-    background-color: #e6f7ff;
-    border: 2px solid #333;
+    background-color: #c9efff;
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0 2px, transparent 2px 22px);
+    border: 3px solid #2e9df7;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
@@ -74,7 +78,7 @@ body {
     width: min(80%, 420px);
     padding: 24px;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background-color: #fff9e6;
     border: 2px solid currentColor;
     border-radius: 8px;
     font-size: 28px;
@@ -109,6 +113,7 @@ body {
     flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
     font-size: 24px;
     font-weight: bold;
+    color: #2e85b7;
 }
 
 .water-drop {
@@ -138,7 +143,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    color: #131313;
+    color: #2e85b7;
     font-size: 48px;
     margin-top: 0;
     margin-bottom: 5px;  /* reduced from 20px */
@@ -152,8 +157,9 @@ body {
 }
 
 .game-tagline {
-    color: #666;
-    font-size: 18px;
+    color: #2e85b7;
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -174,6 +180,10 @@ body {
 
     .game-title {
         font-size: 36px;
+    }
+
+    .game-tagline {
+        font-size: 20px;
     }
 
     .title-icon {
